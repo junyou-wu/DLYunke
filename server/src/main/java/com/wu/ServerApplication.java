@@ -1,8 +1,10 @@
-package com.wu.server;
+package com.wu;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@MapperScan("com.wu.mapper")
 @SpringBootApplication
 public class ServerApplication {
 

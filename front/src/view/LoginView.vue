@@ -23,7 +23,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="login">登 录</el-button>
+          <el-button type="primary" @click="login()">登 录</el-button>
         </el-form-item>
 
         <el-form-item>
@@ -37,6 +37,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import {doGet, doPost} from "../http/httpRequest";
 export default defineComponent({
   name: "LoginView",
 
@@ -55,7 +56,21 @@ export default defineComponent({
 
     }
   },
-  methods: {}
+  methods: {
+    login(){
+      this.$refs.loginRefForm.validate((isValid) =>{
+        if(isValid){
+          let formData = new FormData();
+          formData.append("loginAct",this.user.loginAct);
+          formData.append("loginPwd",this.user.loginPwd);
+         // console.log(formData.get("loginAct"),formData.get("loginPwd"));
+          doPost("/api/login",formData).then((resp)=>{
+            console.log(resp)
+          });
+        }
+      })
+    }
+  }
 
 })
 </script>
@@ -71,6 +86,7 @@ export default defineComponent({
 }
 img {
  height: 400px;
+  width: 100%;
 }
 
 .el-button {
