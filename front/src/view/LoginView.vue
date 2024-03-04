@@ -38,6 +38,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {doGet, doPost} from "../http/httpRequest";
+import {messageTips} from "../utils/utils.js";
 export default defineComponent({
   name: "LoginView",
 
@@ -65,7 +66,12 @@ export default defineComponent({
           formData.append("loginPwd",this.user.loginPwd);
          // console.log(formData.get("loginAct"),formData.get("loginPwd"));
           doPost("/api/login",formData).then((resp)=>{
-            console.log(resp)
+            if(resp.data.code === 200){
+              messageTips("登录成功","success");
+              this.$router.push('/dashboard');
+            }else{
+              messageTips("登录失败","error");
+            }
           });
         }
       })
