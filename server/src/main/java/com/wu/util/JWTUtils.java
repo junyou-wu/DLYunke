@@ -55,8 +55,8 @@ public class JWTUtils {
             jwtVerifier.verify(jwt);
 
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         }
         return false;
     }

@@ -1,16 +1,20 @@
 package com.wu.config;
+import com.wu.config.filter.TokenVerifyFilter;
 import com.wu.config.handler.MyAccessDeniedHandler;
 import com.wu.config.handler.MyAuthenticationFailureHandler;
 import com.wu.config.handler.MyAuthenticationSuccessHandler;
+import com.wu.config.handler.MyLogoutSuccessHandler;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,6 +33,12 @@ public class SecurityConfig {
 
     @Resource
     private MyAccessDeniedHandler myAccessDeniedHandler;
+
+    @Resource
+    private TokenVerifyFilter tokenVerifyFilter;
+
+    @Resource
+    MyLogoutSuccessHandler myLogoutSuccessHandler;
 
 
     @Bean
@@ -64,6 +74,14 @@ public class SecurityConfig {
                 .exceptionHandling((exceptionHandling) -> {
                     exceptionHandling.accessDeniedHandler(myAccessDeniedHandler);
                 })
+
+                .sessionManagement( (session) -> {
+                    //session创建策略
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 无session状态，也就是禁用session
+                })
+
+                //添加自定义的Filter
+                .addFilterBefore(tokenVerifyFilter,LogoutFilter.class)
 
                 .build();
     }

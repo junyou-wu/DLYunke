@@ -37,8 +37,10 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {doGet, doPost} from "../http/httpRequest";
-import {messageTips} from "../utils/utils.js";
+import {doGet, doPost} from "../http/httpRequest.js";
+import {getTokenName, messageTips, removeToken} from "../utils/utils.js";
+import JsEncrypt from 'jsencrypt'
+import {RSA_PUBLIC_KEY} from "../constant/RSA.js";
 export default defineComponent({
   name: "LoginView",
 
@@ -53,8 +55,8 @@ export default defineComponent({
           { required: true, message: '密码不能为空', trigger: 'blur' },
           { min: 6, max: 16, message: '密码长度应为6至16位', trigger: 'blur' },
         ]
-      }
-
+      },
+      rememberMe:false
     }
   },
   methods: {
@@ -64,11 +66,32 @@ export default defineComponent({
           let formData = new FormData();
           formData.append("loginAct",this.user.loginAct);
           formData.append("loginPwd",this.user.loginPwd);
+          formData.append("rememberMe",this.user.rememberMe);
          // console.log(formData.get("loginAct"),formData.get("loginPwd"));
           doPost("/api/login",formData).then((resp)=>{
             if(resp.data.code === 200){
               messageTips("登录成功","success");
-              this.$router.push('/dashboard');
+              removeToken()
+              let str
+              //前端存储token
+              if (this.user.rememberMe === true) {
+                window.localStorage.setItem(getTokenName(), resp.data.data);
+
+              } else {
+                window.sessionStorage.setItem(getTokenName(), resp.data.data);
+
+              }
+              str = JSON.stringify(this.user)
+              let jsEncrypt= new JsEncrypt();
+              jsEncrypt.setPublicKey(RSA_PUBLIC_KEY); // 设置 加密公钥
+              let signature = jsEncrypt.encrypt(str);
+              alert(signature)
+              this.$router.push({
+                path:'/dashboard',
+                query:{
+                  userToken:signature
+                }
+              });
             }else{
               messageTips("登录失败","error");
             }

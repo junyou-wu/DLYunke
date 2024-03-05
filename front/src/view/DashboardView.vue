@@ -80,7 +80,12 @@
             <el-icon><Key /></el-icon>
             <span>字典管理</span>
           </template>
-          <el-icon><Key /></el-icon>
+          <el-menu-item index="1-1">
+            <el-icon><Key /></el-icon>
+            字典管理
+          </el-menu-item>
+
+
         </el-sub-menu>
 
         <el-sub-menu index="7">
@@ -125,7 +130,6 @@
         </el-dropdown>
       </el-header>
       <el-main>
-        Main
       </el-main>
       <el-footer>
         Footer
@@ -135,32 +139,36 @@
 </template>
 
 <script>
-import {doGet} from "../http/httpRequest";
+import {RSA_PRIVATE_KEY} from "../constant/RSA.js";
+import JsEncrypt from "jsencrypt";
 
 export default {
   name: "DashboardView",
   data(){
     return {
-      isCollapse:false
+      isCollapse:false,
+      user:{}
     }
   },
-  mounted(){
-  //  加载用户信息
-    this.getUserInfo();
+  mounted() {
+    this.getUserInfo()
   },
   methods:{
       showMenu(){
         this.isCollapse = !this.isCollapse
-        let Collapse = this.isCollapse
-        document.getElementById("title").style.display = Collapse ? "none": ""
+
+        document.getElementById("title").style.display = this.isCollapse ? "none": ""
       },
       getUserInfo(){
-        doGet("/api/login/info",{}).then((resp)=>{
-          console.log(resp)
-        })
+        let signature = this.$route.query.userToken
+        let jsEncrypt= new JsEncrypt();
+        jsEncrypt.setPrivateKey(RSA_PRIVATE_KEY); // 设置私钥
+        let userToken = jsEncrypt.decrypt(signature);
+        this.user = JSON.parse(userToken)
+        console.log(this.user)
       }
+    }
   }
-}
 </script>
 
 <style scoped>
