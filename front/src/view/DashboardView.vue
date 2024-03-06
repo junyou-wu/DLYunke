@@ -17,6 +17,7 @@
           :collapse="isCollapse"
           :unique-opened="true"
           :collapse-transition="false"
+          :router="true"
           @open="handleOpen"
           @close="handleClose"
       >
@@ -93,7 +94,7 @@
             <el-icon><Stamp /></el-icon>
             <span>用户管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="/dashboard/user">
             <el-icon><Stamp /></el-icon>
             用户管理
           </el-menu-item>
@@ -113,11 +114,12 @@
     </el-aside>
 <!--右侧-->
     <el-container class="rightContent">
+      <!--      顶部-->
       <el-header>
         <el-icon class="show" @click="showMenu()"><Fold /></el-icon>
-        <el-dropdown :hide-on-click="false" class="userMenu">
-          <span class="el-dropdown-link">
-              欢迎你，{{ this.user.name }}用户
+        <el-dropdown :hide-on-click="false" class="userMenu" trigger="click">
+          <span class="el-dropdown-link" >
+          欢迎您，{{ this.user.name }}用户
             <el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
           <template #dropdown>
@@ -129,8 +131,11 @@
           </template>
         </el-dropdown>
       </el-header>
+      <!-- 内容部分-->
       <el-main>
+        <router-view></router-view>
       </el-main>
+<!--      底部-->
       <el-footer>
         Footer
       </el-footer>
@@ -141,7 +146,7 @@
 <script>
 import {doGet} from "../http/httpRequest";
 import {messageConfirm, messageTip, removeToken} from "../utils/utils.js";
-import {ElMessageBox} from "element-plus";
+
 
 export default {
   name: "DashboardView",
@@ -238,5 +243,8 @@ export default {
 .userMenu{
   float: right;
   line-height: 30px;
+}
+.el-dropdown-link{
+  background-color: aqua;
 }
 </style>

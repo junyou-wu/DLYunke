@@ -48,6 +48,7 @@ axios.interceptors.request.use( (config) => {
     if (!token) { //前面加了一个！，表示token不存在，token是空的，token没有值，这个意思
         token = window.localStorage.getItem(getTokenName());
         if (token) {
+            //设置一个请求头，方便后续token续期
             config.headers['rememberMe'] = true;
         }
     }

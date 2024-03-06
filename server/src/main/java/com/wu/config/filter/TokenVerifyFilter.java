@@ -96,7 +96,7 @@ public class TokenVerifyFilter extends OncePerRequestFilter {
 
             //异步处理（更好的方式，使用线程池去执行）
             threadPoolTaskExecutor.execute(() -> {
-                //刷新token
+                //token续期
                 String rememberMe = request.getHeader("rememberMe");
                 if (Boolean.parseBoolean(rememberMe)) {
                     redisService.expire(Constants.REDIS_JWT_KEY + tUser.getId(), Constants.EXPIRE_TIME, TimeUnit.SECONDS);

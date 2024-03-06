@@ -8,7 +8,17 @@ let router = createRouter({
         },
         {
             path: '/dashboard',
-            component: ()=>import('../view/DashboardView.vue')
+            component: ()=>import('../view/DashboardView.vue'),
+            children:[
+                {
+                    path: 'user',
+                    component: ()=>import('../view/UserView.vue')
+                },
+                {
+                    path: 'user/:id',
+                    component: ()=>import('../view/UserDetailView.vue')
+                }
+            ]
         }
     ]
 })

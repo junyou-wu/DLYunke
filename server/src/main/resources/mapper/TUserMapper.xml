@@ -210,5 +210,16 @@
     from t_user
     where login_act = #{username,jdbcType=VARCHAR}
   </select>
+    <select id="getUserByPage" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_user
+    </select>
+  <select id="getUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 
 </mapper>
