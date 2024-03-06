@@ -1,6 +1,6 @@
 import axios from 'axios'
-import {getTokenName, messageTips, removeToken} from "../utils/utils.js";
-import router from "../router/router.js";
+import {getTokenName, messageConfirm, messageTip, removeToken} from "../utils/utils.js";
+import {ElMessageBox} from "element-plus";
 
 /*httpRequest文件，用于封装常用的http方法*/
 
@@ -67,27 +67,23 @@ axios.interceptors.response.use( (response) => {
     // var flag = (response.data.code > 900)
     // console.log(flag)
     if (response.data.code > 900) { //code大于900说明是token验证未通过
-        //给前端用户提示，并且跳转页面
-        alert("token已失效，请重新登录")
-      /*  ElMessageBox.confirm(
-        response.data.msg
-        '系统提醒', //提示的标题
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    ).then(() => { //用户点击“确定”按钮就会触发then函数
-            //既然后端验证token未通过，那么前端的token肯定是有问题的，那没必要存储在浏览器中，直接删除一下
+        ElMessageBox.confirm(
+            "登录状态已失效，请重新登录", //提示语
+            '系统提醒', //提示的标题
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '退出',
+                type: 'warning',
+            }
+        ).then(() => { //用户点击“确定”按钮就会触发then函数
+            //后端验证token未通过,那没必要存储在浏览器中，直接删除
             removeToken();
             //跳到登录页
-            this.$router.push("/")
-        }).catch(() => { //用户点击“取消”按钮就会触发catch函数
-            messageTips("取消去登录", "warning");
+            window.location.href = "/";
+        }).catch(() => { //无论如何都会跳转到登录界面
+            window.location.href = "/";
         })
         return ;
-        el组件无法使用*/
-        router.push("/")
     }
     return response;
 }, function (error) {

@@ -83,6 +83,11 @@ public class SecurityConfig {
                 //添加自定义的Filter
                 .addFilterBefore(tokenVerifyFilter,LogoutFilter.class)
 
+                .logout((logout) -> {
+                        logout.logoutUrl("/api/logout") //退出提交到该地址，该地址不需要我们写controller的，是框架处理
+                    .logoutSuccessHandler(myLogoutSuccessHandler);
+                })
+
                 .build();
     }
 

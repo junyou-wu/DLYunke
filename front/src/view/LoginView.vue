@@ -37,8 +37,8 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {doGet, doPost} from "../http/httpRequest.js";
-import {getTokenName, messageTips, removeToken} from "../utils/utils.js";
+import {doPost} from "../http/httpRequest.js";
+import {getTokenName, messageTip, removeToken} from "../utils/utils.js";
 export default defineComponent({
   name: "LoginView",
 
@@ -57,6 +57,9 @@ export default defineComponent({
       rememberMe:false
     }
   },
+  mounted() {
+    this.freeLogin();
+  },
   methods: {
     login(){
       this.$refs.loginRefForm.validate((isValid) =>{
@@ -68,7 +71,7 @@ export default defineComponent({
          // console.log(formData.get("loginAct"),formData.get("loginPwd"));
           doPost("/api/login",formData).then((resp)=>{
             if(resp.data.code === 200){
-              messageTips("登录成功","success");
+              messageTip("登录成功","success");
               removeToken()
               let str
               //前端存储token
@@ -84,11 +87,22 @@ export default defineComponent({
                 path:'/dashboard',
               });
             }else{
-              messageTips("登录失败","error");
+              messageTip("登录失败","error");
             }
           });
         }
       })
+    },
+    freeLogin() {
+      let token = window.localStorage.getItem(getTokenName());
+      if (token) { //表示token有值，token不是空，token存在
+        doGet("/api/login/free", {}).then(resp => {
+          if (resp.data.code === 200)  {
+            //token验证通过了，那么可以免登录
+            window.location.href = "/dashboard";
+          }
+        })
+      }
     }
   }
 

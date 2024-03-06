@@ -124,7 +124,7 @@
             <el-dropdown-menu>
               <el-dropdown-item>用户信息</el-dropdown-item>
               <el-dropdown-item>修改密码</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
+              <el-dropdown-item divided @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -140,6 +140,8 @@
 
 <script>
 import {doGet} from "../http/httpRequest";
+import {messageConfirm, messageTip, removeToken} from "../utils/utils.js";
+import {ElMessageBox} from "element-plus";
 
 export default {
   name: "DashboardView",
@@ -163,8 +165,32 @@ export default {
           console.log(this.user)
           this.user = resp.data.data
         })
-
-      }
+      },
+    logout() {
+      doGet("/api/logout", {}).then(resp => {
+        if (resp.data.code === 200) {
+          removeToken();
+          messageConfirm("确定退出吗").then(()=>{
+            messageTip("退出成功", "success");
+            removeToken();
+            //跳到登录页
+            this.$router.push("/")
+          }).catch(()=> {
+            messageTip("取消操作", "error")
+          })
+        } else {
+          messageConfirm("是否强制退出？").then(() => { //用户点击“确定”按钮就会触发then函数
+            //后端验证token未通过,那没必要存储在浏览器中，直接删除一下
+            removeToken();
+            messageTip("强制退出成功", "success");
+            //跳到登录页
+            this.$router.push("/")
+          }).catch(() => { //用户点击“取消”按钮就会触发catch函数
+            messageTip("取消强制退出", "warning");
+          })
+        }
+      })
+    },
     }
   }
 </script>
