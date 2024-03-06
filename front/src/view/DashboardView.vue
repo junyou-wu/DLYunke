@@ -117,7 +117,7 @@
         <el-icon class="show" @click="showMenu()"><Fold /></el-icon>
         <el-dropdown :hide-on-click="false" class="userMenu">
           <span class="el-dropdown-link">
-              Username
+              欢迎你，{{ this.user.name }}用户
             <el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
           <template #dropdown>
@@ -139,8 +139,7 @@
 </template>
 
 <script>
-import {RSA_PRIVATE_KEY} from "../constant/RSA.js";
-import JsEncrypt from "jsencrypt";
+import {doGet} from "../http/httpRequest";
 
 export default {
   name: "DashboardView",
@@ -160,12 +159,11 @@ export default {
         document.getElementById("title").style.display = this.isCollapse ? "none": ""
       },
       getUserInfo(){
-        let signature = this.$route.query.userToken
-        let jsEncrypt= new JsEncrypt();
-        jsEncrypt.setPrivateKey(RSA_PRIVATE_KEY); // 设置私钥
-        let userToken = jsEncrypt.decrypt(signature);
-        this.user = JSON.parse(userToken)
-        console.log(this.user)
+        doGet("api/login/info",{}).then((resp)=>{
+          console.log(this.user)
+          this.user = resp.data.data
+        })
+
       }
     }
   }
