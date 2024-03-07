@@ -115,6 +115,7 @@ public class TUser implements UserDetails, Serializable {
      * 一对一关联
      */
     private TUser createByDO;
+
     private TUser editByDO;
 
     private static final long serialVersionUID = 1L;

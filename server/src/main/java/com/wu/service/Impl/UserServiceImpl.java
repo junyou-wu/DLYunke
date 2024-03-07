@@ -2,16 +2,21 @@ package com.wu.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wu.Query.UserQuery;
 import com.wu.constant.Constants;
 import com.wu.mapper.TUserMapper;
 import com.wu.model.TUser;
 import com.wu.service.UserService;
+import com.wu.util.JWTUtils;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,8 +48,51 @@ public class UserServiceImpl implements UserService {
         return info;
     }
 
+
     @Override
-    public TUser getUserById(Integer id) {
+    public TUser getUserDetailById(Integer id) {
         return tUserMapper.getUserById(id);
+    }
+
+    @Override
+    public int insertUser(UserQuery userQuery) {
+
+        String userToken = userQuery.getToken();
+        TUser createUser = JWTUtils.parseUserFromJWT(userToken);
+        TUser tUser = new TUser();
+        BeanUtils.copyProperties(userQuery,tUser);
+        tUser.setLoginPwd(passwordEncoder.encode(tUser.getLoginPwd()));
+        tUser.setCreateTime(new Date());
+        tUser.setCreateBy(createUser.getId());
+        return tUserMapper.insertSelective(tUser);
+    }
+
+    @Override
+    public int updateUser(UserQuery userQuery) {
+        TUser tUser = new TUser();
+
+        BeanUtils.copyProperties(userQuery, tUser);
+
+        if (StringUtils.hasText(userQuery.getLoginPwd())) {
+            tUser.setLoginPwd(passwordEncoder.encode(userQuery.getLoginPwd())); //密码加密
+        }
+
+        tUser.setEditTime(new Date()); //编辑时间
+
+        //登录人的id
+        Integer loginUserId = JWTUtils.parseUserFromJWT(userQuery.getToken()).getId();
+        tUser.setEditBy(loginUserId); //创建人
+
+        return tUserMapper.updateByPrimaryKeySelective(tUser);
+    }
+
+    @Override
+    public int delUserById(Integer id) {
+        return tUserMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int batchDelUserIds(List<String> idList) {
+        return tUserMapper.deleteByIds(idList);
     }
 }

@@ -37,7 +37,7 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {doPost} from "../http/httpRequest.js";
+import {doGet, doPost} from "../http/httpRequest.js";
 import {getTokenName, messageTip, removeToken} from "../utils/utils.js";
 export default defineComponent({
   name: "LoginView",

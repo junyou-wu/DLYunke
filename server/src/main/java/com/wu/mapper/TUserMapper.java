@@ -22,4 +22,6 @@ public interface TUserMapper {
     List<TUser> getUserByPage();
 
     TUser getUserById(Integer id);
+
+    int deleteByIds(List<String> idList);
 }
