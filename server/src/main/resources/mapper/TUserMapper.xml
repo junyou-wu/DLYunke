@@ -239,6 +239,13 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateLastLoginTime">
+    update t_user
+    <set>
+      last_login_time = #{date,jdbcType=TIMESTAMP}
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 
   <select id="selectByLoginAct" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
@@ -249,7 +256,10 @@
     <select id="getUserByPage" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List" />
-      from t_user
+      from t_user tu
+      <where>
+        ${filterSQL}
+      </where>
     </select>
   <select id="getUserById" parameterType="java.lang.Integer" resultMap="UserResultMap">
     select
@@ -259,6 +269,11 @@
     from t_user tu left join t_user tu2 on tu.create_by = tu2.id
                     left join t_user tu3 on tu.edit_by = tu3.id
     where tu.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByOwner" resultMap="BaseResultMap">
+    select
+      id, name
+    from t_user
   </select>
 
 

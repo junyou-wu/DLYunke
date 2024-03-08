@@ -63,43 +63,31 @@
       </el-form-item>
 
       <el-form-item label="账号未过期" prop="accountNoExpired">
-        <el-select v-model="userQuery.accountNoExpired" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-        </el-select>
+        <el-radio-group v-model="userQuery.accountNoExpired" class="ml-4">
+          <el-radio value="1">是</el-radio>
+          <el-radio value="0">否</el-radio>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item label="密码未过期" prop="credentialsNoExpired">
-        <el-select v-model="userQuery.credentialsNoExpired" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-        </el-select>
+        <el-radio-group v-model="userQuery.credentialsNoExpired" class="ml-4">
+          <el-radio value="1">是</el-radio>
+          <el-radio value="0">否</el-radio>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item label="账号未锁定" prop="accountNoLocked">
-        <el-select v-model="userQuery.accountNoLocked" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-        </el-select>
+        <el-radio-group v-model="userQuery.accountNoLocked" class="ml-4">
+          <el-radio value="1">是</el-radio>
+          <el-radio value="0">否</el-radio>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item label="账号是否启用" prop="accountEnabled">
-        <el-select v-model="userQuery.accountEnabled" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-        </el-select>
+        <el-radio-group v-model="userQuery.accountEnabled" class="ml-4">
+          <el-radio value="1">是</el-radio>
+          <el-radio value="0">否</el-radio>
+        </el-radio-group>
       </el-form-item>
     </el-form>
 
@@ -125,7 +113,12 @@ export default {
       pageSize: 0,
       total: 0,
       userDialogVisible:false,
-      userQuery: {},
+      userQuery: {
+        accountNoExpired : '1',
+        credentialsNoExpired : '1',
+        accountNoLocked : '1',
+        accountEnabled : '1'
+      },
       userRules : {
         loginAct : [
           { required: true, message: '请输入登录账号', trigger: 'blur' }
@@ -146,18 +139,6 @@ export default {
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { pattern : /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式有误', trigger: 'blur'}
         ],
-        accountNoExpired : [
-          { required: true, message: '请选择账号是否未过期', trigger: 'blur' },
-        ],
-        credentialsNoExpired : [
-          { required: true, message: '请选择密码是否未过期', trigger: 'blur' },
-        ],
-        accountNoLocked : [
-          { required: true, message: '请选择账号是否未未锁定', trigger: 'blur' },
-        ],
-        accountEnabled : [
-          { required: true, message: '请选择账号是否可用', trigger: 'blur' },
-        ]
       },
       options : [
         {label : '是', value : 1},
@@ -202,7 +183,8 @@ export default {
     edit(id){
       this.userDialogVisible = true;
       this.getUserById(id);
-    },getUserById(id) {
+    },
+    getUserById(id) {
       doGet("/api/user/" + id, {}).then(resp => {
         if (resp.data.code === 200) {
           this.userQuery = resp.data.data;

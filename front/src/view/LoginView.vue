@@ -73,7 +73,6 @@ export default defineComponent({
             if(resp.data.code === 200){
               messageTip("登录成功","success");
               removeToken()
-              let str
               //前端存储token
               if (this.user.rememberMe === true) {
                 window.localStorage.setItem(getTokenName(), resp.data.data);
@@ -82,7 +81,6 @@ export default defineComponent({
                 window.sessionStorage.setItem(getTokenName(), resp.data.data);
 
               }
-
               this.$router.push({
                 path:'/dashboard',
               });
@@ -103,7 +101,7 @@ export default defineComponent({
           }
         })
       }
-    }
+    },
   }
 
 })

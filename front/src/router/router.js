@@ -17,6 +17,10 @@ let router = createRouter({
                 {
                     path: 'user/:id',
                     component: ()=>import('../view/UserDetailView.vue')
+                },
+                {
+                    path: 'activity',
+                    component: ()=>import('../view/ActivityView.vue')
                 }
             ]
         }

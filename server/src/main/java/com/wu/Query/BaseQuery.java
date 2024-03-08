@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class BaseQuery {
 
     private String token; //jwt
+
+    public String FilterSQL;
 }

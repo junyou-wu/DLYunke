@@ -26,7 +26,7 @@
             <el-icon><Briefcase /></el-icon>
             <span>市场管理</span>
           </template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="/dashboard/activity">
               <el-icon><Briefcase /></el-icon>
               市场管理
             </el-menu-item>

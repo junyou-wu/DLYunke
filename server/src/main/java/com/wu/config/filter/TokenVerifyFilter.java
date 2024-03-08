@@ -5,6 +5,7 @@ import com.wu.model.TUser;
 import com.wu.result.CodeEnum;
 import com.wu.result.R;
 import com.wu.service.RedisService;
+import com.wu.service.UserService;
 import com.wu.util.JSONUtils;
 import com.wu.util.JWTUtils;
 import com.wu.util.ResponseUtils;

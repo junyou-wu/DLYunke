@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping("/api/user/batchDel")
     public R batchDelUser(@RequestParam(value = "ids") String ids) {
-
+        //字符串转成字符串数组
         List<String> idList = Arrays.asList(ids.split(","));
 
         int batchDel = userService.batchDelUserIds(idList);
@@ -65,5 +65,10 @@ public class UserController {
         return batchDel >= idList.size() ? R.OK() : R.FAIL();
     }
 
+    @GetMapping(value = "/api/owner")
+    public R owner() {
+        List<TUser> ownerList = userService.getOwnerList();
+        return R.OK(ownerList);
+    }
 
 }

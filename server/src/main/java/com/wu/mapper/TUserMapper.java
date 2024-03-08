@@ -1,7 +1,10 @@
 package com.wu.mapper;
 
+import com.wu.Query.BaseQuery;
+import com.wu.commons.DataScope;
 import com.wu.model.TUser;
 
+import java.util.Date;
 import java.util.List;
 
 public interface TUserMapper {
@@ -19,9 +22,14 @@ public interface TUserMapper {
 
     TUser selectByLoginAct(String username);
 
-    List<TUser> getUserByPage();
+    @DataScope(tableAlias = "tu",tableField = "id")
+    List<TUser> getUserByPage(BaseQuery query);
 
     TUser getUserById(Integer id);
 
     int deleteByIds(List<String> idList);
+
+    int updateLastLoginTime(Integer id, Date date);
+
+    List<TUser> selectByOwner();
 }
