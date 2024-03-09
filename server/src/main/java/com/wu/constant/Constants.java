@@ -20,8 +20,6 @@ public class Constants {
     //jwt过期时间30分钟
     public static final Long DEFAULT_EXPIRE_TIME = 30 * 60L;
 
-    public static final String EXPORT_EXCEL_URI = "/api/exportExcel";
-
     //请求token的名称
     public static final String TOKEN_NAME = "Authorization";
 

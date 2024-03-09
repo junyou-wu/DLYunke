@@ -54,7 +54,7 @@
       @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" />
     <el-table-column type="index" label="序号" width="60" />
-    <el-table-column prop="ownerDO.name" label="负责人" />
+    <el-table-column prop="ownerDO.name" label="负责人"/>
     <el-table-column property="name" label="活动名称" show-overflow-tooltip />
     <el-table-column property="startTime" label="开始时间" show-overflow-tooltip />
     <el-table-column property="endTime" label="结束时间" show-overflow-tooltip />
@@ -91,7 +91,9 @@ export default defineComponent({
     return {
       userId: '',
       //市场活动搜索表单对象，初始值是空
-      activityQuery : {},
+      activityQuery : {
+        activityTime: {}
+      },
       //市场活动列表对象，初始值是空
       activityList : [{
         ownerDO : {}
@@ -141,7 +143,6 @@ export default defineComponent({
         createTime : this.activityQuery.createTime
       }).then(resp => {
         if (resp.data.code === 200) {
-          console.log(resp.data);
           this.activityList = resp.data.data.list;
           this.pageSize = resp.data.data.pageSize;
           this.total = resp.data.data.total;
@@ -158,7 +159,7 @@ export default defineComponent({
 
     //加载负责人
     loadOwner() {
-      doGet("/api/owner", {}).then(resp => {
+      doGet("/api/user/owner", {}).then(resp => {
         if (resp.data.code === 200)  {
           this.ownerOptions = resp.data.data;
         }

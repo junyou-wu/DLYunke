@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
                 },
                 () -> {
                     //生产，从mysql查询数据
-                    return (List<TUser>)tUserMapper.selectByOwner();
+                    return tUserMapper.selectByOwner();
                 },
                 (t) -> {
                     //消费，把数据放入缓存redis
