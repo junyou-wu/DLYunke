@@ -54,5 +54,4 @@ public class ActivityController {
         int update = activityService.updateActivity(activityQuery);
         return update >= 1 ? R.OK() : R.FAIL();
     }
-
 }

@@ -31,6 +31,17 @@
       <id column="ownerId" javaType="java.lang.Integer" property="id"></id>
       <result column="ownerName" javaType="java.lang.String" property="name"></result>
     </association>
+
+    <association property="createDO" javaType="com.wu.model.TUser">
+      <id column="createById" javaType="java.lang.Integer" property="id"></id>
+      <result column="createByName" javaType="java.lang.String" property="name"></result>
+    </association>
+
+    <association property="editDO" javaType="com.wu.model.TUser">
+      <id column="editById" javaType="java.lang.Integer" property="id"></id>
+      <result column="editByName" javaType="java.lang.String" property="name"></result>
+    </association>
+
   </resultMap>
   <sql id="Base_Column_List">
     id, owner_id, `name`, start_time, end_time, cost, description, create_time, create_by, 
