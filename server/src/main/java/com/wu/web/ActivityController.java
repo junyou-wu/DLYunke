@@ -1,7 +1,9 @@
 package com.wu.web;
 
 import com.wu.Query.ActivityQuery;
+import com.wu.Query.ActivityRemarkQuery;
 import com.wu.model.TActivity;
+import com.wu.model.TActivityRemark;
 import com.wu.model.TUser;
 import com.wu.result.R;
 import com.wu.service.ActivityService;
@@ -53,5 +55,29 @@ public class ActivityController {
         activityQuery.setToken(token);
         int update = activityService.updateActivity(activityQuery);
         return update >= 1 ? R.OK() : R.FAIL();
+    }
+
+    @PostMapping("/api/activity/remark/save")
+    public R addActivityRemark(@RequestBody ActivityRemarkQuery activityRemarkQuery,@RequestHeader(value = "Authorization") String token){
+
+        activityRemarkQuery.setToken(token);
+        int addRemark = activityService.saveActivityRemark(activityRemarkQuery);
+
+        return addRemark >= 1 ? R.OK() : R.FAIL();
+    }
+
+    @GetMapping("/api/activity/remark/remarkList")
+    public R getRemarkList(@RequestParam(value = "current") Integer current, @RequestParam(value = "activityId") Integer activityId){
+
+        ActivityRemarkQuery activityRemarkQuery = new ActivityRemarkQuery();
+        activityRemarkQuery.setActivityId(activityId);
+
+        if (current == null) {
+            current = 1;
+        }
+
+        PageInfo<TActivityRemark> remarkList = activityService.getActivityRemarkList(current,activityRemarkQuery);
+
+        return R.OK(remarkList);
     }
 }

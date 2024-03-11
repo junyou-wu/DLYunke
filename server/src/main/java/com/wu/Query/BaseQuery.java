@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class BaseQuery {
 
-    private String token; //jwt
+    private String token;
 
     public String FilterSQL;
 }

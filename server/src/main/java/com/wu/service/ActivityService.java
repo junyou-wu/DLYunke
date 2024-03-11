@@ -1,8 +1,10 @@
 package com.wu.service;
 
 import com.wu.Query.ActivityQuery;
+import com.wu.Query.ActivityRemarkQuery;
 import com.wu.model.TActivity;
 import com.github.pagehelper.PageInfo;
+import com.wu.model.TActivityRemark;
 
 import java.util.List;
 
@@ -19,4 +21,8 @@ public interface ActivityService {
     int updateActivity(ActivityQuery activityQuery);
 
     List<TActivity> getOngoingActivity();
+
+    int saveActivityRemark(ActivityRemarkQuery activityRemarkQuery);
+
+    PageInfo<TActivityRemark>getActivityRemarkList(Integer current, ActivityRemarkQuery activityRemarkQuery);
 }
