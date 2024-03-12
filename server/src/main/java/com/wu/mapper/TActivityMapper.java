@@ -9,6 +9,8 @@ import java.util.List;
 public interface TActivityMapper {
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByIds(List<String> idList);
+
     int insert(TActivity record);
 
     int insertSelective(TActivity record);
@@ -27,4 +29,5 @@ public interface TActivityMapper {
     List<TActivity> selectOngoingActivity();
 
     Integer selectByCount();
+
 }

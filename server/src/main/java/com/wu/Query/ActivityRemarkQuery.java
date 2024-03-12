@@ -4,6 +4,10 @@ import lombok.Data;
 
 @Data
 public class ActivityRemarkQuery extends BaseQuery{
-    int activityId;
+
+    Integer id;
+
+    Integer activityId;
+
     String noteContent;
 }

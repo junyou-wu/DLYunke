@@ -8,6 +8,7 @@ import com.wu.mapper.TActivityRemarkMapper;
 import com.wu.model.TActivity;
 import com.wu.model.TActivityRemark;
 import com.wu.model.TUser;
+import com.wu.result.R;
 import com.wu.service.ActivityService;
 import com.wu.util.JWTUtils;
 import com.github.pagehelper.PageHelper;
@@ -104,5 +105,40 @@ public class ActivityServiceImpl implements ActivityService {
         List<TActivityRemark> list = tActivityRemarkMapper.selectListByPage(activityRemarkQuery);
         // 3.封装分页数据到PageInfo
         return new PageInfo<TActivityRemark>(list);
+    }
+
+    @Override
+    public int updateRemark(ActivityRemarkQuery activityRemarkQuery) {
+        TActivityRemark tActivityRemark = new TActivityRemark();
+        BeanUtils.copyProperties(activityRemarkQuery,tActivityRemark);
+
+        tActivityRemark.setEditTime(new Date());
+        tActivityRemark.setEditBy(JWTUtils.parseUserFromJWT(activityRemarkQuery.getToken()).getId());
+
+        return tActivityRemarkMapper.updateByPrimaryKeySelective(tActivityRemark);
+    }
+
+    @Override
+    public TActivityRemark getRemark(Integer id) {
+
+        return tActivityRemarkMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int deleteRemark(Integer id) {
+        TActivityRemark tActivityRemark = new TActivityRemark();
+        tActivityRemark.setId(id);
+        tActivityRemark.setDeleted(1);
+        return tActivityRemarkMapper.updateByPrimaryKeySelective(tActivityRemark);
+    }
+
+    @Override
+    public int deleteActivity(Integer id) {
+        return tActivityMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int batchDelActivitiesById(List<String> idList) {
+        return tActivityMapper.deleteByIds(idList);
     }
 }

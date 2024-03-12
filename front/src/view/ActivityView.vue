@@ -83,6 +83,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {doGet} from "../http/httpRequest.js";
+import {messageConfirm, messageTip} from "../utils/utils.js";
 
 export default defineComponent({
   name: "ActivityView",
@@ -110,7 +111,8 @@ export default defineComponent({
           //正则表达式，从网上找，或者AI工具找，找到后需要测试一下，因为有可能找到的正则有问题
           { pattern : /^[0-9]+(\.[0-9]{2})?$/, message: '活动预算必须是整数或者两位小数', trigger: 'blur'}
         ]
-      }
+      },
+      ActivityIdArray : []
     }
   },
 
@@ -119,6 +121,13 @@ export default defineComponent({
   },
 
   methods : {
+    handleSelectionChange(selectDataArray) {
+      this.ActivityIdArray = [];
+      selectDataArray.forEach(data => {
+        let activityId = data.id;
+        this.ActivityIdArray.push(activityId);
+      })
+    },
     //查询用户列表数据
     getData(current) {
       let startTime = ''; //开始时间
@@ -189,6 +198,49 @@ export default defineComponent({
     //查看详情
     view(id) {
       this.$router.push("/dashboard/activity/" + id);
+    },
+
+    del(id) {
+      messageConfirm("您确定要删除该数据吗？").then(() => { //用户点击“确定”按钮就会触发then函数
+        doGet("/api/activity/delete/" + id, {}).then(resp => {
+          if (resp.data.code === 200) {
+            messageTip("删除成功", "success");
+            //页面刷新
+            this.$router.go(0);
+          } else {
+            messageTip("删除失败，原因：" + resp.data.msg, "error");
+          }
+        })
+      }).catch(() => { //用户点击“取消”按钮就会触发catch函数
+        messageTip("取消删除", "warning");
+      })
+    },
+
+    batchDel() {
+      if (this.ActivityIdArray.length <= 0) {
+        //提示一下
+        messageTip("请选择要删除的数据", "warning");
+        return;
+      }
+      messageConfirm("您确定要删除这些数据吗？").then(() => { //用户点击“确定”按钮就会触发then函数
+        let ids = this.ActivityIdArray.join(",");
+       /* console.log("ActivityIdArray==============="+ this.ActivityIdArray);
+        console.log("ids==============="+ids);*/
+        doGet("/api/activity/batchDel", {
+          ids : ids
+        }).then(resp => {
+          console.log(resp);
+          if (resp.data.code === 200) {
+            messageTip("批量删除成功", "success");
+            //页面刷新
+            this.$router.go(0);
+          } else {
+            messageTip("批量删除失败，原因：" + resp.data.msg, "error");
+          }
+        })
+      }).catch(() => { //用户点击“取消”按钮就会触发catch函数
+        messageTip("取消批量删除", "warning");
+      })
     },
   }
 })

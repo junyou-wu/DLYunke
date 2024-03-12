@@ -19,6 +19,7 @@ public interface TActivityRemarkMapper {
     int updateByPrimaryKeySelective(TActivityRemark record);
 
     int updateByPrimaryKey(TActivityRemark record);
+
     @DataScope(tableAlias = "tar", tableField = "create_by")
     List<TActivityRemark> selectListByPage(ActivityRemarkQuery activityRemarkQuery);
 }

@@ -154,7 +154,6 @@ export default {
   methods: {
     handleSelectionChange(selectDataArray) {
       this.userIdArray = [];
-      console.log(selectDataArray);
       selectDataArray.forEach(data => {
         let userId = data.id;
         this.userIdArray.push(userId);

@@ -1,16 +1,15 @@
-package com.wu.model;
+package com.wu.Query;
 
-import java.io.Serializable;
+import com.wu.model.TUser;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
-/**
- * t_clue
- * @author 
- */
 @Data
-public class TClue implements Serializable {
+public class ClueQuery extends BaseQuery {
+
     /**
      * 主键，自动增长，线索ID
      */
@@ -108,44 +107,9 @@ public class TClue implements Serializable {
 
     /**
      * 下次联系时间
+     *
+     * 前端提交过来了一个string的日期，后端使用Date接收，那么需要加个注解转换一下
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date nextContactTime;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 创建人
-     */
-    private Integer createBy;
-
-    /**
-     * 编辑时间
-     */
-    private Date editTime;
-
-    /**
-     * 编辑人
-     */
-    private Integer editBy;
-
-    private TUser ownerDO;
-
-    private TActivity activityDO;
-    private TDicValue appellationDO;
-    private TDicValue needLoanDO;
-    private TDicValue intentionStateDO;
-    private TProduct intentionProductDO;
-    private TDicValue stateDO;
-    private TDicValue sourceDO;
-
-
-
-
-
-
-
-    private static final long serialVersionUID = 1L;
 }

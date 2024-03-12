@@ -51,6 +51,7 @@ public class TActivityRemark implements Serializable {
     private Integer deleted;
 
     private TUser createDO;
+
     private TUser editDO;
 
     private static final long serialVersionUID = 1L;

@@ -25,4 +25,14 @@ public interface ActivityService {
     int saveActivityRemark(ActivityRemarkQuery activityRemarkQuery);
 
     PageInfo<TActivityRemark>getActivityRemarkList(Integer current, ActivityRemarkQuery activityRemarkQuery);
+
+    int updateRemark(ActivityRemarkQuery activityRemarkQuery);
+
+    TActivityRemark getRemark(Integer id);
+
+    int deleteRemark(Integer id);
+
+    int deleteActivity(Integer id);
+
+    int  batchDelActivitiesById(List<String> idList);
 }

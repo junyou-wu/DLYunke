@@ -37,7 +37,7 @@
             <el-icon><Opportunity /></el-icon>
             <span>线索管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="/dashboard/clue">
             <el-icon><Opportunity /></el-icon>
             线索管理
           </el-menu-item>

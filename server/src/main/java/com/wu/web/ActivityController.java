@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -57,6 +58,12 @@ public class ActivityController {
         return update >= 1 ? R.OK() : R.FAIL();
     }
 
+    @GetMapping(value = "/api/activity/delete/{id}")
+    public R deleteActivity(@PathVariable(value = "id") Integer id){
+        int delete = activityService.deleteActivity(id);
+        return delete >= 1 ? R.OK() : R.FAIL();
+    }
+
     @PostMapping("/api/activity/remark/save")
     public R addActivityRemark(@RequestBody ActivityRemarkQuery activityRemarkQuery,@RequestHeader(value = "Authorization") String token){
 
@@ -79,5 +86,38 @@ public class ActivityController {
         PageInfo<TActivityRemark> remarkList = activityService.getActivityRemarkList(current,activityRemarkQuery);
 
         return R.OK(remarkList);
+    }
+
+    @PostMapping("/api/activity/remark/edit")
+    public R editActivityRemark(@RequestBody ActivityRemarkQuery activityRemarkQuery , @RequestHeader(value = "Authorization") String token){
+
+        activityRemarkQuery.setToken(token);
+        int update = activityService.updateRemark(activityRemarkQuery);
+        return update >= 1 ? R.OK() : R.FAIL();
+    }
+
+    @GetMapping("/api/activity/remark/{id}")
+    public R getRemark(@PathVariable(value = "id") Integer id){
+
+        TActivityRemark tActivityRemark =   activityService.getRemark(id);
+
+        return R.OK(tActivityRemark);
+    }
+
+    @GetMapping("/api/activity/remark/delete/{id}")
+    public R deleteRemark(@PathVariable(value = "id") Integer id){
+
+        int delete =   activityService.deleteRemark(id);
+
+        return delete >= 1 ? R.OK() : R.FAIL();
+    }
+
+    @GetMapping("/api/activity/batchDel")
+    public R batchDelActivities(@RequestParam(value = "ids") String ids){
+        List<String> idList = Arrays.asList(ids.split(","));
+
+        int batchDel = activityService.batchDelActivitiesById(idList);
+
+        return batchDel >= idList.size() ? R.OK() : R.FAIL();
     }
 }

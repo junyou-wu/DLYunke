@@ -1,35 +1,35 @@
 <template>
   <el-form ref="activityRemarkRefForm" :model="activityRemarkQuery" label-width="120px" :rules="activityRemarkRules">
     <el-form-item label="ID">
-      <div class="desc">{{activityDetail.id}}&nbsp;</div>
+      <div class="desc">{{activityDetail.id}}</div>
     </el-form-item>
 
     <el-form-item label="负责人">
-      <div class="desc"> {{activityDetail.ownerDO.name}}&nbsp;</div>
+      <div class="desc"> {{activityDetail.ownerDO.name}}</div>
     </el-form-item>
 
     <el-form-item label="活动名称">
-      <div class="desc">{{activityDetail.name}}&nbsp;</div>
+      <div class="desc">{{activityDetail.name}}</div>
     </el-form-item>
 
     <el-form-item label="开始时间">
-      <div class="desc">{{activityDetail.startTime}}&nbsp;</div>
+      <div class="desc">{{activityDetail.startTime}}</div>
     </el-form-item>
 
     <el-form-item label="结束时间">
-      <div class="desc">{{activityDetail.endTime}}&nbsp;</div>
+      <div class="desc">{{activityDetail.endTime}}</div>
     </el-form-item>
 
     <el-form-item label="活动预算">
-      <div class="desc">{{activityDetail.cost}}&nbsp;</div>
+      <div class="desc">{{activityDetail.cost}}</div>
     </el-form-item>
 
     <el-form-item label="活动描述">
-      <div class="desc">{{activityDetail.description}}&nbsp;</div>
+      <div class="desc">{{activityDetail.description}}</div>
     </el-form-item>
 
     <el-form-item label="创建时间">
-      <div class="desc">{{activityDetail.createTime}}&nbsp;</div>
+      <div class="desc">{{activityDetail.createTime}}</div>
     </el-form-item>
 
     <el-form-item label="创建人">
@@ -69,9 +69,8 @@
     <el-table-column property="editDO.name" label="编辑人"/>
     <el-table-column label="操作">
       <template #default="scope">
-        <a href="javascript:" @click="edit(scope.row.id)">编辑</a>
-        &nbsp;
-        <a href="javascript:" @click="del(scope.row.id)">删除</a>
+        <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
+        <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -192,7 +191,7 @@ export default defineComponent({
             if (resp.data.code === 200) {
               messageTip("提交成功", "success");
               //刷新
-              this.reload();
+              this.$router.go(0)
             } else {
               messageTip("提交失败", "error");
             }
@@ -238,14 +237,14 @@ export default defineComponent({
     editActivityRemarkSubmit() {
       this.$refs.editActivityRemarkRefForm.validate((isValid) => {
         if (isValid) {
-          doPut("/api/activity/Remark", {
+          doPost("/api/activity/remark/edit", {
             id : this.editActivityRemarkQuery.id,
             noteContent: this.editActivityRemarkQuery.noteContent
           }).then(resp => {
             if (resp.data.code === 200) {
               messageTip("编辑成功", "success");
               //刷新
-              this.$router.push(0)
+              this.$router.go(0)
             } else {
               messageTip("编辑失败", "error");
             }
@@ -257,12 +256,12 @@ export default defineComponent({
     //删除活动备注
     del(id) {
       messageConfirm("您确定要删除该数据吗？").then(() => { //用户点击“确定”按钮就会触发then函数
-        doDelete("/api/activity/Remark/" + id, {}).then(resp => {
+        doGet("/api/activity/remark/delete/" + id, {}).then(resp => {
           console.log(resp);
           if (resp.data.code === 200) {
             messageTip("删除成功", "success");
             //页面刷新
-            this.$router.push(0)
+            this.$router.go(0)
           } else {
             messageTip("删除失败，原因：" + resp.data.msg, "error");
           }
