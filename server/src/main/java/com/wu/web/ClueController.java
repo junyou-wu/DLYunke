@@ -5,9 +5,10 @@ import com.wu.model.TClue;
 import com.wu.result.R;
 import com.wu.service.ClueService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 public class ClueController {
@@ -21,5 +22,12 @@ public class ClueController {
         }
         PageInfo<TClue> pageInfo = clueService.getClueByPage(current);
         return R.OK(pageInfo);
+    }
+
+    @PostMapping(value = "/api/importExcel")
+    public R importExcel(MultipartFile file , @RequestHeader(value = "Authorization") String token) throws IOException {
+//        先接到前端传过来的文件，并转化成数据流
+        clueService.importExcel(file.getInputStream(),token);
+        return R.OK();
     }
 }

@@ -1,6 +1,5 @@
 package com.wu.mapper;
 
-import com.github.pagehelper.PageInfo;
 import com.wu.Query.BaseQuery;
 import com.wu.model.TClue;
 
@@ -20,4 +19,6 @@ public interface TClueMapper {
     int updateByPrimaryKey(TClue record);
 
     List<TClue> selectClueByPage(BaseQuery build);
+
+    void saveClue(List<TClue> tClueList);
 }

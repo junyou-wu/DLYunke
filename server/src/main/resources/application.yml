@@ -25,4 +25,9 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
 
+project:
+  task:
+    cron: '* */5 * * * *'
+    delay: 180000
+
 

@@ -7,6 +7,18 @@
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="DicTypeResultMap" type="com.wu.model.TDicType">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <!-- 一对多关联-->
+    <collection property="dicValueList" ofType="com.wu.model.TDicValue">
+      <id column="dicId" jdbcType="INTEGER" property="id" />
+      <result column="dicName" jdbcType="VARCHAR" property="typeValue" />
+    </collection>
+  </resultMap>
   <sql id="Base_Column_List">
     id, type_code, type_name, remark
   </sql>
@@ -16,7 +28,13 @@
     from t_dic_type
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByAll" resultMap="DicTypeResultMap">
+      select
+        tdt.*,
+        tdv.id dicId, tdv.type_value dicName
+      from t_dic_type tdt left join t_dic_value tdv on tdt.type_code = tdv.type_code
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dic_type
     where id = #{id,jdbcType=INTEGER}
   </delete>

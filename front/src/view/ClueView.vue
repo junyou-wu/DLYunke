@@ -49,11 +49,47 @@
         @current-change="toPage"/>
   </p>
 
+
+  <el-dialog v-model="importExcelDialogVisible" title="导入线索Excel" width="55%" center draggable>
+    <el-upload
+        ref="uploadRef"
+        method="post"
+        :http-request="uploadFile"
+        :auto-upload="false">
+
+      <template #trigger>
+        <el-button type="primary">选择Excel文件</el-button>
+      </template>
+      仅支持后缀名为.xls或.xlsx的文件
+
+      <template #tip>
+        <div class="fileTip">
+          重要提示：
+          <ul>
+            <li>上传仅支持后缀名为.xls或.xlsx的文件；</li>
+            <li>给定Excel文件的第一行将视为字段名；</li>
+            <li>请确认您的文件大小不超过50MB；</li>
+            <li>日期值以文本形式保存，必须符合yyyy-MM-dd格式；</li>
+            <li>日期时间以文本形式保存，必须符合yyyy-MM-dd HH:mm:ss的格式；</li>
+          </ul>
+        </div>
+      </template>
+    </el-upload>
+
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="importExcelDialogVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="submitExcel">导 入</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import {doGet} from "../http/httpRequest.js";
+import {doGet, doPost} from "../http/httpRequest.js";
+import {messageTip} from "../utils/utils.js";
 
 export default defineComponent({
   name: "ClueView",
@@ -105,6 +141,34 @@ export default defineComponent({
     //分页函数(current这个参数是ele-plus组件传过来，就是传的当前页)
     toPage(current) {
       this.getData(current);
+    },
+
+    importExcel()  {
+      //弹个窗
+      this.importExcelDialogVisible = true;
+    },
+
+    //上传文件的请求提交
+    uploadFile(param) {
+      let fileObj = param.file // 相当于input里取得的file
+      let formData = new FormData() // new一个FormData对象
+      formData.append('file', fileObj)//文件对象，前面file是参数名，后面fileObj是参数值
+      doPost("/api/importExcel", formData).then(resp => {
+        if (resp.data.code === 200) {
+          //Excel导入成功，提示一下
+          messageTip("导入成功", "success");
+          //清理一下上传的文件
+          this.$refs.uploadRef.clearFiles();
+          //页面刷新
+          this.$router.go(0);
+        } else {
+          //Excel导入失败
+          messageTip("导入失败", "error");
+        }
+      })
+    },
+    submitExcel() {
+      this.$refs.uploadRef.submit();
     },
   }
 })

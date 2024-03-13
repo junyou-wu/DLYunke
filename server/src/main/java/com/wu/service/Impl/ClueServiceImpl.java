@@ -1,8 +1,10 @@
 package com.wu.service.Impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wu.Query.BaseQuery;
+import com.wu.config.listener.UploadDataListener;
 import com.wu.constant.Constants;
 import com.wu.mapper.TClueMapper;
 import com.wu.model.TClue;
@@ -10,6 +12,7 @@ import com.wu.service.ClueService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -29,4 +32,10 @@ public class ClueServiceImpl implements ClueService {
     }
 
 
+    @Override
+    public void importExcel(InputStream inputStream,String token) {
+        EasyExcel.read(inputStream, TClue.class, new UploadDataListener(tClueMapper, token))
+                .sheet()
+                .doRead();
+    }
 }

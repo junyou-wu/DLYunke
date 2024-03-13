@@ -23,7 +23,13 @@
     from t_product
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectAllOnSaleProduct" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_product
+      where state = 0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_product
     where id = #{id,jdbcType=INTEGER}
   </delete>

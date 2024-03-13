@@ -1,13 +1,13 @@
 package com.wu.service;
 
 import com.github.pagehelper.PageInfo;
-import com.wu.Query.BaseQuery;
 import com.wu.model.TClue;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.io.InputStream;
 
 public interface ClueService {
 
     PageInfo<TClue> getClueByPage(Integer current);
+
+    void importExcel(InputStream inputStream,String token);
 }
