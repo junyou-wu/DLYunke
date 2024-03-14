@@ -34,5 +34,7 @@ public class TDicValue implements Serializable {
      */
     private String remark;
 
+    private TDicValue noteWayDO;
+
     private static final long serialVersionUID = 1L;
 }

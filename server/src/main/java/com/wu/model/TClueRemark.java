@@ -55,5 +55,13 @@ public class TClueRemark implements Serializable {
      */
     private Integer deleted;
 
+    private TUser createByDO;
+
+    private TUser editByDO;
+
+    private TDicValue noteWayDO;
+
+
+
     private static final long serialVersionUID = 1L;
 }

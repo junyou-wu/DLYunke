@@ -9,8 +9,8 @@
       @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="50"/>
     <el-table-column type="index" label="序号" width="65"/>
-    <el-table-column property="ownerDO.name" label="负责人" width="120" />
-    <el-table-column property="activityDO.name" label="所属活动"/>
+    <el-table-column property="ownerDO.name" label="负责人" width="70" />
+    <el-table-column property="activityDO.name" label="所属活动" width="125"/>
     <el-table-column label="姓名">
       <template #default="scope">
         <a href="javascript:" @click="view(scope.row.id)">{{ scope.row.fullName }}</a>
@@ -89,7 +89,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {doGet, doPost} from "../http/httpRequest.js";
-import {messageTip} from "../utils/utils.js";
+import {messageConfirm, messageTip} from "../utils/utils.js";
 
 export default defineComponent({
   name: "ClueView",
@@ -112,7 +112,8 @@ export default defineComponent({
       //分页总共查询出多少条数据
       total : 0,
       //导入线索Excel的弹窗，true弹，false不弹
-      importExcelDialogVisible : false
+      importExcelDialogVisible : false,
+      clueArray:[]
     }
   },
 
@@ -121,7 +122,12 @@ export default defineComponent({
   },
 
   methods : {
-    handleSelectionChange() {
+    handleSelectionChange(selectDataArray) {
+      this.clueArray = [];
+      selectDataArray.forEach(data => {
+        let clueId = data.id;
+        this.clueArray.push(clueId);
+      })
     },
 
     //查询用户列表数据
@@ -169,6 +175,59 @@ export default defineComponent({
     },
     submitExcel() {
       this.$refs.uploadRef.submit();
+    },
+    addClue(){
+      this.$router.push("/dashboard/clue/add");
+    },
+    edit(id) {
+      this.$router.push("/dashboard/clue/edit/" + id);
+    },
+
+    //详情
+    view(id) {
+      this.$router.push("/dashboard/clue/detail/" + id);
+    },
+
+    //删除线索
+    del(id) {
+      messageConfirm("您确定要删除该数据吗？").then(() => { //用户点击“确定”按钮就会触发then函数
+        doGet("/api/clue/delete/" + id, {}).then(resp => {
+
+          if (resp.data.code === 200) {
+            messageTip("删除成功", "success");
+            //页面刷新
+            this.$router.go(0);
+          } else {
+            messageTip("删除失败，原因：" + resp.data.msg, "error");
+          }
+        })
+      }).catch(() => { //用户点击“取消”按钮就会触发catch函数
+        messageTip("取消删除", "warning");
+      })
+    },
+    batchDelClue(){
+      if (this.clueArray.length <= 0) {
+        //提示一下
+        messageTip("请选择要删除的数据", "warning");
+        return;
+      }
+      messageConfirm("您确定要删除这些数据吗？").then(() => { //用户点击“确定”按钮就会触发then函数
+        let ids = this.clueArray.join(",");
+        doGet("/api/clue/batchDel", {
+          ids : ids
+        }).then(resp => {
+          if (resp.data.code === 200) {
+            messageTip("批量删除成功", "success");
+            //页面刷新
+            this.$router.go(0);
+          } else {
+            messageTip("批量删除失败，原因：" + resp.data.msg, "error");
+          }
+        })
+      }).catch(() => { //用户点击“取消”按钮就会触发catch函数
+        messageTip("取消批量删除", "warning");
+      })
+
     },
   }
 })
