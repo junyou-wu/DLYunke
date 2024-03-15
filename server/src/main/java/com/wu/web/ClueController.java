@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.wu.Query.ActivityRemarkQuery;
 import com.wu.Query.ClueQuery;
 import com.wu.Query.ClueRemarkQuery;
+import com.wu.Query.CustomerQuery;
 import com.wu.model.TActivityRemark;
 import com.wu.model.TClue;
 import com.wu.model.TClueRemark;

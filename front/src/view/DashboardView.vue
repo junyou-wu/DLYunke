@@ -48,7 +48,7 @@
             <el-icon><WalletFilled /></el-icon>
             <span>客户管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="/dashboard/customer">
             <el-icon><WalletFilled /></el-icon>
             客户管理
           </el-menu-item>

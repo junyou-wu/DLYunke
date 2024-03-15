@@ -55,5 +55,11 @@ public class TCustomerRemark implements Serializable {
      */
     private Integer deleted;
 
+    private TUser createDO = new TUser();
+    private TUser editDO = new TUser();
+    private TDicValue noteWayDO = new TDicValue();
+
+
+
     private static final long serialVersionUID = 1L;
 }

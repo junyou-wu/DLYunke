@@ -3,6 +3,7 @@
       ref="clueRemarkRefForm"
       :model="clueRemark"
       label-width="110px"
+      :rules="editClueRules"
       style="max-width: 95%;">
 
     <el-form-item label="负责人">
@@ -81,13 +82,13 @@
       <div class="desc">{{clueDetail.nextContactTime}}&nbsp;</div>
     </el-form-item>
 
-    <el-form-item label="填写跟踪记录" prop="noteContent">
+    <el-form-item label="填写跟踪记录" prop="noteContent" name = "noteContent">
       <el-input
           v-model="clueRemark.noteContent"
           :rows="8"
           type="textarea"/>
     </el-form-item>
-    <el-form-item label="跟踪方式" prop="noteWay">
+    <el-form-item label="跟踪方式" prop="noteWay" name = "noteWay">
       <el-select
           v-model="clueRemark.noteWay"
           placeholder="请选择跟踪方式"
@@ -139,7 +140,7 @@
 <!--  编辑活动备注弹窗-->
   <el-dialog v-model="clueRemarkDialogVisible" title="编辑线索备注记录" width="55%" center draggable>
     <el-form ref="editClueRemarkRefForm" :model="editClueRemarkQuery" label-width="110px" :rules="editClueRemarkRules">
-      <el-form-item label="跟踪方式">
+      <el-form-item label="跟踪方式" prop="noteWay">
       <el-select
           v-model="editClueRemarkQuery.noteWay"
           placeholder="请选择跟踪方式"
@@ -231,7 +232,9 @@ export default defineComponent({
         sourceDO  : {}
       },
       //线索跟踪记录对象，初始值是空
-      clueRemark : {},
+      clueRemark : {
+
+      },
       //跟踪方式的下拉选项，初始值是空
       noteWayOptions : [{}],
       //线索跟踪记录列表，初始值是空
@@ -249,7 +252,19 @@ export default defineComponent({
       editClueRemarkQuery : {
         noteWayOptions : []
       },
+      editClueRules : {
+        noteContent : [
+          { required: true, message: '请输入线索备注', trigger: 'blur' },
+          { min: 5, max: 255, message: '线索备注长度为5-255个字符', trigger: 'blur' }
+        ],
+        noteWay: [
+          { required: true, message: '请选择跟踪方式', trigger: ['blur','change'] },
+        ],
+      },
       editClueRemarkRules : {
+        noteWay: [
+          { required: true, message: '请选择跟踪方式', trigger: ['blur','change'] },
+        ],
         noteContent : [
           { required: true, message: '请输入线索备注', trigger: 'blur' },
           { min: 5, max: 255, message: '线索备注长度为5-255个字符', trigger: 'blur' }
@@ -300,17 +315,21 @@ export default defineComponent({
 
     //提交线索跟踪记录
     clueRemarkSubmit() {
-      doPost("/api/clue/remark", {
-        clueId : this.clueDetail.id,
-        noteContent : this.clueRemark.noteContent,
-        noteWay : this.clueRemark.noteWay
-      }).then(resp => {
-        if (resp.data.code === 200) {
-          messageTip("提交成功", "success");
-          //刷新
-          this.$router.go(0)
-        } else {
-          messageTip("提交失败", "error");
+      this.$refs.clueRemarkRefForm.validate((isValid)=>{
+        if(isValid){
+          doPost("/api/clue/remark", {
+            clueId : this.clueDetail.id,
+            noteContent : this.clueRemark.noteContent,
+            noteWay : this.clueRemark.noteWay
+          }).then(resp => {
+            if (resp.data.code === 200) {
+              messageTip("提交成功", "success");
+              //刷新
+              this.$router.go(0)
+            } else {
+              messageTip("提交失败", "error");
+            }
+          })
         }
       })
     },
@@ -365,7 +384,7 @@ export default defineComponent({
             if (resp.data.code === 200) {
               messageTip("转换成功", "success");
               //刷新
-              this.reload();
+              this.$router.go(0);
             } else {
               messageTip("转换失败", "error");
             }

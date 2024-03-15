@@ -28,7 +28,7 @@
     <result column="edit_by" jdbcType="INTEGER" property="editBy" />
   </resultMap>
 
-  <resultMap id="ClueResultMap" type="com.wu.model.TClue">
+  <resultMap id="CustomerResultMap" type="com.wu.model.TClue">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="owner_id" jdbcType="INTEGER" property="ownerId" />
     <result column="activity_id" jdbcType="INTEGER" property="activityId" />
@@ -132,7 +132,7 @@
     from t_clue
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectClueByPage" parameterType="java.lang.Integer" resultMap="ClueResultMap">
+  <select id="selectClueByPage" parameterType="java.lang.Integer" resultMap="CustomerResultMap">
     select
       tc.*,
       tu1.id ownerId, tu1.name ownerName,
@@ -161,7 +161,7 @@
       from t_clue
         where phone = #{phone, jdbcType=VARCHAR}
     </select>
-  <select id="selectDetailById" resultType="com.wu.model.TClue" resultMap="ClueResultMap">
+  <select id="selectDetailById" resultType="com.wu.model.TClue" resultMap="CustomerResultMap">
     select
       tc.*,
       tu1.id ownerId, tu1.name ownerName,

@@ -12,6 +12,33 @@
     <result column="edit_by" jdbcType="INTEGER" property="editBy" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <resultMap id="customerResultMap" type="com.wu.model.TCustomerRemark">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="note_way" jdbcType="INTEGER" property="noteWay" />
+    <result column="note_content" jdbcType="VARCHAR" property="noteContent" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+
+    <association property="createDO" javaType="com.wu.model.TUser">
+      <id column="createById" jdbcType="INTEGER" property="id" />
+      <result column="createByName" jdbcType="INTEGER" property="name" />
+    </association>
+    <!--一对一关联查询-->
+    <association property="editDO" javaType="com.wu.model.TUser">
+      <id column="editById" jdbcType="INTEGER" property="id" />
+      <result column="editByName" jdbcType="VARCHAR" property="name" />
+    </association>
+    <!--一对一关联查询-->
+    <association property="noteWayDO" javaType="com.wu.model.TDicValue">
+      <id column="noteWayId" jdbcType="INTEGER" property="id" />
+      <result column="noteWayName" jdbcType="VARCHAR" property="typeValue" />
+    </association>
+  </resultMap>
   <sql id="Base_Column_List">
     id, customer_id, note_way, note_content, create_by, create_time, edit_time, edit_by, 
     deleted
@@ -21,6 +48,21 @@
     <include refid="Base_Column_List" />
     from t_customer_remark
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCustomerRemarkByPage" parameterType="java.lang.Integer" resultMap="customerResultMap">
+    select
+    tcr.*,
+    tu1.id createById, tu1.name createByName,
+    tu2.id editById, tu2.name editByName,
+    tdv.id noteWayId, tdv.type_value noteWayName
+    from t_customer_remark tcr  left join t_user tu1 on tcr.create_by  = tu1.id
+    left join t_user tu2 on tcr.edit_by  = tu2.id
+    left join t_dic_value tdv on tcr.note_way = tdv.id
+
+    <where>
+      tcr.customer_id = #{customerId, jdbcType=INTEGER} and (tcr.deleted is null or tcr.deleted = 0)
+      ${filterSQL}
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_customer_remark
