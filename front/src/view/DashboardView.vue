@@ -11,9 +11,9 @@
           active-text-color="#ffd04b"
           background-color="#1c4d69"
           class="el-menu-vertical-demo"
-          default-active="2"
           text-color="#fff"
           style="border-right: solid 0px"
+          :default-active='currentRoutePath'
           :collapse="isCollapse"
           :unique-opened="true"
           :collapse-transition="false"
@@ -153,11 +153,13 @@ export default {
   data(){
     return {
       isCollapse:false,
-      user:{}
+      user:{},
+      currentRoutePath: ''
     }
   },
   mounted() {
-    this.getUserInfo()
+    this.getUserInfo();
+    this.getCurrentRoutePath();
   },
   methods:{
       showMenu(){
@@ -196,8 +198,20 @@ export default {
         }
       })
     },
+    getCurrentRoutePath() {
+      let path = this.$route.path;
+      let pathArr = path.split("/");
+
+      if(pathArr.length > 3){
+        this.currentRoutePath = "/" + pathArr[1] + "/" + pathArr[2];
+      }else{
+        this.currentRoutePath = path;
+      }
+      console.log(this.currentRoutePath);
     }
-  }
+    },
+
+}
 </script>
 
 <style scoped>

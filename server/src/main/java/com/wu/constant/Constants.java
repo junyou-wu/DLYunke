@@ -27,4 +27,9 @@ public class Constants {
 
 
     public static final Integer PAGE_SIZE = 10;
+
+    //导出Excel的接口路径
+    public static final String EXPORT_EXCEL_URI = "/api/customer/exportExcel";
+
+    public static final String EXCEL_FILE_NAME = "客户信息数据";
 }

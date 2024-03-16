@@ -46,7 +46,14 @@ public class TokenVerifyFilter extends OncePerRequestFilter {
         } else {
 
 
-            String token = request.getHeader(TOKEN_NAME);
+            String token = null;
+            if (request.getRequestURI().equals(Constants.EXPORT_EXCEL_URI)) {
+                //从请求路径的参数中获取token
+                token = request.getParameter("Authorization");
+            } else {
+                //其他请求都是从请求头中获取token
+                token = request.getHeader("Authorization");
+            }
 
             //验证token有没有被篡改过
             if (!JWTUtils.verifyJWT(token)) {

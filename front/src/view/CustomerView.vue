@@ -113,9 +113,9 @@ export default defineComponent({
       //1、向后端发送一个请求 （我们来实现）
       let iframe = document.createElement("iframe")
       if (ids) {
-        iframe.src = axios.defaults.baseURL + "/api/exportExcel?Authorization="+token + "&ids="+ ids;
+        iframe.src = axios.defaults.baseURL + "/api/customer/exportExcel?Authorization="+token + "&ids="+ ids;
       } else {
-        iframe.src = axios.defaults.baseURL + "/api/exportExcel?Authorization="+token
+        iframe.src = axios.defaults.baseURL + "/api/customer/exportExcel?Authorization="+token
       }
       iframe.style.display = "none"; //iframe隐藏，页面上不要显示出来
       document.body.appendChild(iframe);
@@ -134,7 +134,6 @@ export default defineComponent({
         messageTip("请选择要导出的数据", "warning");
         return;
       }
-      // ids = "1,3,6,11,15";
       let ids = this.customerIdArray.join(",");
       this.exportExcel(ids);
     },
