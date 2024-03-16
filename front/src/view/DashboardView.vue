@@ -21,93 +21,14 @@
           @open="handleOpen"
           @close="handleClose"
       >
-        <el-sub-menu index="1">
+        <el-sub-menu :index="index" v-for="(menuPermission, index) in user.menuPermissionList" :key="menuPermission.id">
           <template #title>
-            <el-icon><Briefcase /></el-icon>
-            <span>市场管理</span>
+            <el-icon><component :is="menuPermission.icon"></component></el-icon>
+            <span> {{menuPermission.name}} </span>
           </template>
-            <el-menu-item index="/dashboard/activity">
-              <el-icon><Briefcase /></el-icon>
-              市场管理
-            </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="2">
-          <template #title>
-            <el-icon><Opportunity /></el-icon>
-            <span>线索管理</span>
-          </template>
-          <el-menu-item index="/dashboard/clue">
-            <el-icon><Opportunity /></el-icon>
-            线索管理
-          </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="3">
-          <template #title>
-            <el-icon><WalletFilled /></el-icon>
-            <span>客户管理</span>
-          </template>
-          <el-menu-item index="/dashboard/customer">
-            <el-icon><WalletFilled /></el-icon>
-            客户管理
-          </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="4">
-          <template #title>
-            <el-icon><Goods /></el-icon>
-            <span>交易管理</span>
-          </template>
-          <el-menu-item index="1-1">
-            <el-icon><Goods /></el-icon>
-            交易管理
-          </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="5">
-          <template #title>
-            <el-icon><StarFilled /></el-icon>
-            <span>产品管理</span>
-          </template>
-          <el-menu-item index="1-1">
-            <el-icon><StarFilled /></el-icon>
-            产品管理
-          </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="6">
-          <template #title>
-            <el-icon><Key /></el-icon>
-            <span>字典管理</span>
-          </template>
-          <el-menu-item index="1-1">
-            <el-icon><Key /></el-icon>
-            字典管理
-          </el-menu-item>
-
-
-        </el-sub-menu>
-
-        <el-sub-menu index="7">
-          <template #title>
-            <el-icon><Stamp /></el-icon>
-            <span>用户管理</span>
-          </template>
-          <el-menu-item index="/dashboard/user">
-            <el-icon><Stamp /></el-icon>
-            用户管理
-          </el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="8">
-          <template #title>
-            <el-icon><el-icon><Setting /></el-icon></el-icon>
-            <span>系统管理</span>
-          </template>
-          <el-menu-item index="1-1">
-            <el-icon><Setting /></el-icon>
-            系统管理
+          <el-menu-item v-for="subPermission in menuPermission.subPermissionList" :key="subPermission.id" :index="subPermission.url">
+            <el-icon><component :is="subPermission.icon"></component></el-icon>
+            {{subPermission.name}}
           </el-menu-item>
         </el-sub-menu>
       </el-menu>

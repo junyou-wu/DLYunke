@@ -87,6 +87,10 @@ public class SecurityConfig {
                         logout.logoutUrl("/api/logout") //退出提交到该地址，该地址不需要我们写controller的，是框架处理
                     .logoutSuccessHandler(myLogoutSuccessHandler);
                 })
+                //这个是没有权限访问时触发
+                .exceptionHandling((exceptionHandling) -> {
+                    exceptionHandling.accessDeniedHandler(myAccessDeniedHandler);
+                })
 
                 .build();
     }

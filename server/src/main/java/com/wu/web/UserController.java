@@ -6,6 +6,7 @@ import com.wu.model.TUser;
 import com.wu.result.R;
 import com.wu.service.UserService;
 import jakarta.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class UserController {
 
     @Resource
     UserService userService;
-
+    @PreAuthorize(value = "hasAuthority('user:list')")
     @GetMapping("/api/userList")
     public R getUserList(@RequestParam(value = "current",required = false) Integer current) {
         if(current == null || current == 0){
@@ -27,13 +28,13 @@ public class UserController {
 
         return R.OK(userByPage);
     }
-
+    @PreAuthorize(value = "hasAuthority('user:view')")
     @GetMapping("/api/user/{id}")
     public R userDetail(@PathVariable(value = "id") Integer id) {
         TUser tUser = userService.getUserDetailById(id);
         return R.OK(tUser);
     }
-
+    @PreAuthorize(value = "hasAuthority('user:add')")
     @PostMapping("/api/user/insert")
     public R userInsert(UserQuery userQuery,@RequestHeader(value = "Authorization") String token){
 
@@ -41,20 +42,20 @@ public class UserController {
         int flag = userService.insertUser(userQuery);
         return flag >= 1 ? R.OK() : R.FAIL();
     }
-
+    @PreAuthorize(value = "hasAuthority('user:edit')")
     @PostMapping("/api/user/edit")
     public R editUser(UserQuery userQuery, @RequestHeader(value = "Authorization") String token) {
         userQuery.setToken(token);
         int update = userService.updateUser(userQuery);
         return update >= 1 ? R.OK() : R.FAIL();
     }
-
+    @PreAuthorize(value = "hasAuthority('user:delete')")
     @GetMapping("/api/user/delete/{id}")
     public R delUser(@PathVariable(value = "id") Integer id) {
         int del = userService.delUserById(id);
         return del >= 1 ? R.OK() : R.FAIL();
     }
-
+    @PreAuthorize(value = "hasAuthority('user:delete')")
     @GetMapping("/api/user/batchDel")
     public R batchDelUser(@RequestParam(value = "ids") String ids) {
         //字符串转成字符串数组

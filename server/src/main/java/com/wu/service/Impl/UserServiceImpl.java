@@ -6,8 +6,10 @@ import com.wu.Query.BaseQuery;
 import com.wu.Query.UserQuery;
 import com.wu.constant.Constants;
 import com.wu.manager.RedisManager;
+import com.wu.mapper.TPermissionMapper;
 import com.wu.mapper.TRoleMapper;
 import com.wu.mapper.TUserMapper;
+import com.wu.model.TPermission;
 import com.wu.model.TRole;
 import com.wu.model.TUser;
 import com.wu.service.UserService;
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     RedisManager redisManager;
 
+    @Resource
+    TPermissionMapper tPermissionMapper;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -47,13 +52,28 @@ public class UserServiceImpl implements UserService {
         if (tUser == null) {
             throw new UsernameNotFoundException("登录账号不存在");
         }
+
+        //查询一下当前用户的角色
         List<TRole> tRoleList = tRoleMapper.selectByUserId(tUser.getId());
         //字符串的角色列表
         List<String> stringRoleList = new ArrayList<>();
         tRoleList.forEach(tRole -> {
             stringRoleList.add(tRole.getRole());
         });
-        tUser.setRoleList(stringRoleList);
+        tUser.setRoleList(stringRoleList); //设置用户的角色
+
+        //查询一下该用户有哪些菜单权限
+        List<TPermission> menuPermissionList = tPermissionMapper.selectMenuPermissionByUserId(tUser.getId());
+        tUser.setMenuPermissionList(menuPermissionList);
+
+        //查询一下该用户有哪些功能权限
+        List<TPermission> buttonPermissionList = tPermissionMapper.selectButtonPermissionByUserId(tUser.getId());
+        List<String> stringPermissionList = new ArrayList<>();
+        buttonPermissionList.forEach(tPermission -> {
+            stringPermissionList.add(tPermission.getCode());//权限标识符
+        });
+        tUser.setPermissionList(stringPermissionList);//设置用户的权限标识符
+
         return tUser;
     }
 
