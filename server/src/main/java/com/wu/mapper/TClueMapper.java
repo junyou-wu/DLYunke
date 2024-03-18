@@ -5,6 +5,7 @@ import com.wu.Query.ClueRemarkQuery;
 import com.wu.commons.DataScope;
 import com.wu.model.TClue;
 import com.wu.model.TClueRemark;
+import com.wu.result.NameValue;
 
 import java.util.List;
 
@@ -30,4 +31,8 @@ public interface TClueMapper {
     TClue selectDetailById(Integer id);
 
     int deleteByIds(List<String> idList);
+
+    Integer selectClueByCount();
+
+    List<NameValue> selectBySource();
 }

@@ -24,4 +24,5 @@ public interface TCustomerMapper {
 
     TCustomer selectCustomerDetailById(Integer id);
 
+    Integer selectByCount();
 }

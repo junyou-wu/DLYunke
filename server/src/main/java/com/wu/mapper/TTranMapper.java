@@ -2,6 +2,8 @@ package com.wu.mapper;
 
 import com.wu.model.TTran;
 
+import java.math.BigDecimal;
+
 public interface TTranMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,12 @@ public interface TTranMapper {
     int updateByPrimaryKeySelective(TTran record);
 
     int updateByPrimaryKey(TTran record);
+
+    BigDecimal selectBySuccessTranAmount();
+
+    BigDecimal selectByTotalTranAmount();
+
+    int selectByTotalTranCount();
+
+    int selectBySuccessTranCount();
 }

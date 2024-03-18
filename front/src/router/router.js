@@ -11,6 +11,11 @@ let router = createRouter({
             component: ()=>import('../view/DashboardView.vue'),
             children:[
                 {
+                    path: '',
+                    component: ()=>import('../view/StatisticView.vue')
+                }
+                ,
+                {
                     path: 'user',
                     component: ()=>import('../view/UserView.vue')
                 },

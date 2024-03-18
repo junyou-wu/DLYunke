@@ -163,7 +163,12 @@
       </if>
     </where>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectByCount" resultType="java.lang.Integer">
+    select
+      count(0)
+    from t_customer
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_customer
     where id = #{id,jdbcType=INTEGER}
   </delete>
